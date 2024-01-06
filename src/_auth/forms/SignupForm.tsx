@@ -18,8 +18,9 @@ import { Loader } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { z } from "zod"
-
+import {  useToast } from "@/components/ui/use-toast"
 const SignupForm = () => {
+    const {toast}  =useToast();
  const isUserLoading = false;
  // 1. Define your form.
  const form = useForm<z.infer<typeof SignupValidation>>({
@@ -38,9 +39,9 @@ const SignupForm = () => {
     const newUser = await createUserAccount(values);
    
     if(!newUser){
-        return;
+        return toast({title:'Sign up failed. Please try again.'});
     }
-    
+
   }
   return (
 
