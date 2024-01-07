@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { createUserAccount } from "@/lib/appwrite/api"
+
 import { SignupValidation } from "@/lib/validation"
 
  
@@ -19,9 +19,13 @@ import { useForm } from "react-hook-form"
 import { Link } from "react-router-dom"
 import { z } from "zod"
 import {  useToast } from "@/components/ui/use-toast"
+import { useCreateUserAccount } from "@/lib/react-query/queriesAndMutation"
 const SignupForm = () => {
     const {toast}  =useToast();
- const isUserLoading = false;
+
+
+    const {mutateAsync: createUserAccount,isLoading:isCreatingAccount}=
+    useCreateUserAccount();
  // 1. Define your form.
  const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -115,7 +119,7 @@ const SignupForm = () => {
 
 
 <Button type="submit" className="shad-button_primary">
-            {isUserLoading ? (
+            {isCreatingAccount ? (
               <div className="flex-center gap-2">
            <Loader/> Loading...
               </div>
