@@ -16,17 +16,18 @@ import { SignupValidation } from "@/lib/validation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { z } from "zod"
 import {  useToast } from "@/components/ui/use-toast"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutation"
+import { useUserContext } from "@/context/AuthContext"
 const SignupForm = () => {
     const {toast}  =useToast();
-
-
-    const {mutateAsync: createUserAccount,isLoading:isCreatingAccount}=
+    const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+    const navigate= useNavigate()
+    const {mutateAsync: createUserAccount,isPending:isCreatingAccount}=
     useCreateUserAccount();
-    const {mutateAsync: signInAccount,isLoading:isSigningIn}=
+    const {mutateAsync: signInAccount,isPending:isSigningIn}=
     useSignInAccount();
  // 1. Define your form.
  const form = useForm<z.infer<typeof SignupValidation>>({
@@ -53,6 +54,14 @@ const SignupForm = () => {
      })
      if(!session){
         return toast({title:'Sign in failed. Please try again.'})
+     }
+
+     const isLoggedIn = await checkAuthUser();
+     if(isLoggedIn){
+        form.reset();
+        navigate('/')
+     }else{
+        toast({title:"Sign up failed. Please try again."})
      }
   }
   return (
