@@ -54,10 +54,10 @@ const navigate = useNavigate();
     }
 
   useEffect(()=>{
-    if(
+    if(localStorage.getItem('cookieFallback') === null ||
         localStorage.getItem('cookieFallback') === '[]'
        ) navigate('sign-in')
-// localStorage.getItem('cookieFallback') === null
+
  checkAuthUser();
   },[])  
 const value  = {
