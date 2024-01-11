@@ -6,7 +6,8 @@ import { useUserContext } from '@/context/AuthContext'
 
 const Topbar = () => {
     const {mutate:signOut,isSuccess} = useSigOutAccount()
-    const {user } =useUserContext()
+    const {user} =useUserContext()
+
 const navigate = useNavigate();
     useEffect(()=>{
         if(isSuccess) navigate(0)
